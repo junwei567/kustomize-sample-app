@@ -12,8 +12,8 @@ spec:
         deployment: demo
     spec:
       containers:
-      - name: the-container
-        image: annabaker/kustomize-demo-app:latest
+      - name: demo-app-container
+        image: quay.io/jwlim567/kustomize-demo-app:latest
         ports:
         - containerPort: 8080
         env:
