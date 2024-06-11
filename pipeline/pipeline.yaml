@@ -1,0 +1,54 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: sample-pipeline
+spec:
+
+  workspaces:
+    - name: shared-workspace
+    - name: maven-settings
+    - name: maven-local-repo
+  
+  params:
+    - name: repo-url
+      type: string
+      description: The git repository URL to clone from.
+    - name: tag-name
+      type: string
+      description: The git tag to clone. e.g. main
+
+  tasks:
+    - name: fetch-repository
+      taskRef:
+        name: git-clone
+      workspaces:
+        - name: output
+          workspace: shared-workspace
+      params:
+        - name: url
+          value: $(params.repo-url)
+        - name: revision
+          value: $(params.tag-name)
+        - name: deleteExisting
+          value: "true"
+    - name: maven-run
+      taskRef:
+        name: maven
+      runAfter:
+        - fetch-repository
+      workspaces:
+        - name: maven-local-repo
+          workspace: maven-local-repo
+        - name: source
+          workspace: shared-workspace
+      params:
+        - name: OPENJDK_IMAGE
+          value: docker.io/library/openjdk:8-jre-alpine
+        - name: GOALS
+          value: "clean package checkstyle:check"
+        - name: SKIP_TESTS
+          value: "true"          
+        - name: MAVEN_OPTS
+          value: ""
+
+

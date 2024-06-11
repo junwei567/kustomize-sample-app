@@ -1,0 +1,23 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  name: sample-pipeline
+spec:
+  pipelineRef:
+    name: sample-pipeline
+  params:
+    - name: repo-url
+      value: https://github.com/junwei567/kustomize-sample-app
+    - name: tag-name
+      value: master
+
+  workspaces:
+    - name: maven-settings
+      emptyDir: {}
+    - name: shared-workspace
+      persistentvolumeclaim:
+        claimName: shared-workspace
+    - name: maven-local-repo
+      persistentvolumeclaim:
+        claimName: maven-local-repo
