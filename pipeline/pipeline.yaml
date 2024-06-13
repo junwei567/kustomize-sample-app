@@ -31,24 +31,26 @@ spec:
           value: $(params.tag-name)
         - name: deleteExisting
           value: "true"
+
     - name: maven-run
       taskRef:
         name: maven
       runAfter:
         - fetch-repository
       workspaces:
-        - name: maven-local-repo
-          workspace: maven-local-repo
+        - name: maven-settings
+          workspace: maven-settings
         - name: source
           workspace: shared-workspace
+        - name: maven-local-repo
+          workspace: maven-local-repo
       params:
-        - name: OPENJDK_IMAGE
-          value: docker.io/library/openjdk:8-jre-alpine
+        - name: CONTEXT_DIR
+          value: "app"
         - name: GOALS
-          value: "clean package checkstyle:check"
-        - name: SKIP_TESTS
-          value: "true"          
-        - name: MAVEN_OPTS
-          value: ""
+          value: 
+            - -DskipTests
+            - clean
+            - package
 
 

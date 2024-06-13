@@ -23,8 +23,7 @@ spec:
   - name: build-maven
     image: $(params.OPENJDK_IMAGE)
     script: |
-      #!/usr/bin/env bash
-      set +x
+
       
       printf -- "-------------------------------------------------\n"
       printf    " Performing application build with Maven wrapper \n"
@@ -35,7 +34,7 @@ spec:
       mkdir -p $MAVEN_LOCAL_REPO
       printf "Done!\n\n"
 
-      cd $(workspaces.source.path)
+      cd $(workspaces.source.path)/app
       MAVEN_OPTS="$(params.MAVEN_OPTS)" ./mvnw -B -Dhttps.protocols=TLSv1.2 -Djava.awt.headless=true -DskipTests=$(params.SKIP_TESTS) $(params.GOALS) -Dmaven.repo.local=$MAVEN_LOCAL_REPO
       
     workingDir: $(workspaces.source.path)
