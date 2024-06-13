@@ -53,4 +53,20 @@ spec:
             - clean
             - package
 
-
+    - name: build
+      taskRef:
+        name: buildah
+      runAfter:
+        - maven-run
+      params:
+        - name: IMAGE
+          value: image-registry.openshift-image-registry.svc:5000/sample-pipeline/kustomize-demo-app:$(params.tag-name)
+        - name: TLSVERIFY
+          value: "false"
+        - name: DOCKERFILE
+          value: "/workspace/source/app/Containerfile"
+        - name: CONTEXT
+          value: "app"
+      workspaces:
+        - name: source
+          workspace: shared-workspace
