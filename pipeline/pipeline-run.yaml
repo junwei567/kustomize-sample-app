@@ -11,6 +11,8 @@ spec:
       value: https://github.com/junwei567/kustomize-sample-app
     - name: tag-name
       value: master
+    - name: environment
+      value: staging
 
   workspaces:
     - name: maven-settings

@@ -16,6 +16,8 @@ spec:
     - name: tag-name
       type: string
       description: The git tag to clone. e.g. main
+    - name: environment
+      type: string
 
   tasks:
     - name: fetch-repository
@@ -69,4 +71,20 @@ spec:
           value: "app"
       workspaces:
         - name: source
+          workspace: shared-workspace
+
+    - name: deploy
+      taskRef:
+        name: openshift-client
+      runAfter:
+        - build
+      params:
+        - name: SCRIPT
+          value: |
+            oc apply -k overlays/$(params.environment)
+            oc wait --for=condition=available --timeout=600s deployment/$(params.environment)-the-deployment
+            echo "-----------Displaying all the pods-----------"
+            oc get pods
+      workspaces:
+        - name: manifest-dir
           workspace: shared-workspace
