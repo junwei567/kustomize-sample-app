@@ -2,6 +2,10 @@
 
 This is a sample web application that uses Kustomize to deploy to different environments (staging and production).
 
+Tekton pipeline defines a series of Tasks to accomplish a specific build or delivery goal. This can be triggered by an event or invoked from a PipelineRun.
+We will be using Tasks from the official Tekton catalog that the community has provided.
+These Tasks define a series of steps that uses specific tools to ingest specific inputs and produce specific outputs.
+
 Clone the repo to get started!
 
 ## Deploy to your cluster
